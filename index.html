@@ -520,14 +520,22 @@
             }, 1000);
             
             // Function to add an agent message to the chat
-            function addAgentMessage(message) {
+            function addAgentMessage(message, isHTML = false) {
                 // Check if the last message was from the agent
                 const $lastMessage = $('#chat-container > div:last-child');
                 
                 if ($lastMessage.hasClass('rtchat-agent-block')) {
                     // If the last message was from the agent, just add a new message to the existing panel
                     const $panel = $lastMessage.find('.rtchat-agent-block-panel');
-                    const msgBlock = $('<div class="rtchat-agent-block-message"></div>').text(message);
+                    const msgBlock = $('<div class="rtchat-agent-block-message"></div>');
+                    
+                    // Set content as text or HTML based on the isHTML flag
+                    if (isHTML) {
+                        msgBlock.html(message);
+                    } else {
+                        msgBlock.text(message);
+                    }
+                    
                     $panel.append(msgBlock);
                     
                     // Scroll to the new message
@@ -537,7 +545,14 @@
                     const agentBlock = $('<div class="rtchat-agent-block"></div>');
                     const avatar = $('<div class="rtchat-agent-block-avatar"><img src="./chat-assets/img/agent.jpg"></div>');
                     const panel = $('<div class="rtchat-agent-block-panel"></div>');
-                    const msgBlock = $('<div class="rtchat-agent-block-message"></div>').text(message);
+                    const msgBlock = $('<div class="rtchat-agent-block-message"></div>');
+                    
+                    // Set content as text or HTML based on the isHTML flag
+                    if (isHTML) {
+                        msgBlock.html(message);
+                    } else {
+                        msgBlock.text(message);
+                    }
                     
                     panel.append(msgBlock);
                     agentBlock.append(avatar).append(panel);
@@ -566,6 +581,9 @@
             // Function to add options buttons to the chat
             function addOptions(options, orientation = 'horizontal') {
                 const agentBlock = $('<div class="rtchat-agent-block"></div>');
+                const avatar = $('<div class="rtchat-agent-block-avatar"><img src="./chat-assets/img/agent.jpg"></div>').css({
+                    'opacity': '0' // Make avatar invisible but keep the structure
+                });
                 const panel = $('<div class="rtchat-agent-block-panel"></div>');
                 const optionsContainer = $(`<div class="rtchat-agent-block-options-container-${orientation}"></div>`);
                 
@@ -604,7 +622,7 @@
                 });
                 
                 panel.append(optionsContainer);
-                agentBlock.append(panel);
+                agentBlock.append(avatar).append(panel);
                 $('#chat-container').append(agentBlock);
                 
                 // Scroll to the new options
@@ -721,7 +739,7 @@
                                 addAgentMessage('🎉 Congratulations! 🎁');
                                 
                                 setTimeout(() => {
-                                    addAgentMessage(`You're pre-qualified for a Medicare Assistance plan with thousands in additional benefits.`);
+                                    addAgentMessage('✅ Groceries<br>✅ Prescriptions<br>✅ Bills & More!', true);
                                     
                                     setTimeout(() => {
                                         addAgentMessage(`You can use it for your groceries, prescriptions, and so on.`);
@@ -759,22 +777,16 @@
                                 addAgentMessage('🎉 Congratulations! 🎁');
                                 
                                 setTimeout(() => {
-                                    addAgentMessage(`You're pre-qualified for thousands in health benefits —`);
+                                    addAgentMessage('✅ Groceries<br>✅ Prescriptions<br>✅ Bills & More!', true);
                                     
                                     setTimeout(() => {
-                                        addAgentMessage(`✅ Groceries
-✅ Prescriptions
-✅ Bills & More!`);
+                                        addAgentMessage(`TAP TO CALL NOW and Lock In Your Benefits:`);
                                         
                                         setTimeout(() => {
-                                            addAgentMessage(`TAP TO CALL NOW and Lock In Your Benefits:`);
+                                            addCallButton('1 (833) 670-8648');
                                             
                                             setTimeout(() => {
-                                                addCallButton('1 (833) 670-8648');
-                                                
-                                                setTimeout(() => {
-                                                    addAgentMessage(`⏳ Spots are limited — act fast before enrollment closes!`);
-                                                }, 800);
+                                                addAgentMessage(`⏳ Spots are limited — act fast before enrollment closes!`);
                                             }, 800);
                                         }, 1200);
                                     }, 1200);
@@ -803,22 +815,16 @@
                                 addAgentMessage('🎉 Congratulations! 🎁');
                                 
                                 setTimeout(() => {
-                                    addAgentMessage(`You're pre-qualified for thousands in health benefits —`);
+                                    addAgentMessage('✅ Groceries<br>✅ Prescriptions<br>✅ Bills & More!', true);
                                     
                                     setTimeout(() => {
-                                        addAgentMessage(`✅ Groceries
-✅ Prescriptions
-✅ Bills & More!`);
+                                        addAgentMessage(`TAP TO CALL NOW and Lock In Your Benefits:`);
                                         
                                         setTimeout(() => {
-                                            addAgentMessage(`TAP TO CALL NOW and Lock In Your Benefits:`);
+                                            addCallButton('1 (833) 670-8297');
                                             
                                             setTimeout(() => {
-                                                addCallButton('1 (833) 670-8297');
-                                                
-                                                setTimeout(() => {
-                                                    addAgentMessage(`⏳ Spots are limited — act fast before enrollment closes!`);
-                                                }, 800);
+                                                addAgentMessage(`⏳ Spots are limited — act fast before enrollment closes!`);
                                             }, 800);
                                         }, 1200);
                                     }, 1200);
