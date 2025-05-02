@@ -586,46 +586,65 @@
                 });
                 const panel = $('<div class="rtchat-agent-block-panel"></div>');
                 const optionsContainer = $(`<div class="rtchat-agent-block-options-container-${orientation}"></div>`);
-                
-                if (orientation === 'horizontal') {
+                if (orientation === 'vertical') {
+                    optionsContainer.css({
+                        'display': 'flex',
+                        'flex-direction': 'column',
+                        'gap': '10px',
+                        'align-items': 'flex-start',
+                        'width': 'auto'
+                    });
+                    options.forEach(option => {
+                        let buttonText;
+                        if (typeof option === 'string') {
+                            buttonText = option;
+                        } else {
+                            buttonText = option.text;
+                        }
+                        const button = $('<button class="rtchat-agent-block-option"></button>').text(buttonText).css({
+                            'margin': '3px 0',
+                            'min-width': '120px',
+                            'border-radius': '18px',
+                            'background-color': '#4285f4',
+                            'color': 'white',
+                            'padding': '14px 20px',
+                            'font-weight': 'normal',
+                            'text-align': 'center',
+                            'display': 'block',
+                            'width': 'fit-content'
+                        });
+                        optionsContainer.append(button);
+                    });
+                } else {
                     optionsContainer.css({
                         'display': 'flex',
                         'flex-wrap': 'wrap',
                         'gap': '10px',
                         'justify-content': 'flex-start'
                     });
-                }
-                
-                options.forEach(option => {
-                    let buttonText;
-                    
-                    // Handle both string options and object options with text
-                    if (typeof option === 'string') {
-                        buttonText = option;
-                    } else {
-                        buttonText = option.text;
-                    }
-                    
-                    const button = $('<button class="rtchat-agent-block-option"></button>').text(buttonText).css({
-                        'margin': '5px 5px',
-                        'min-width': '100px',
-                        'border-radius': '18px',
-                        'background-color': '#4285f4',
-                        'color': 'white',
-                        'padding': '12px 20px',
-                        'font-weight': 'normal',
-                        'text-align': 'center'
+                    options.forEach(option => {
+                        let buttonText;
+                        if (typeof option === 'string') {
+                            buttonText = option;
+                        } else {
+                            buttonText = option.text;
+                        }
+                        const button = $('<button class="rtchat-agent-block-option"></button>').text(buttonText).css({
+                            'margin': '5px 5px',
+                            'min-width': '100px',
+                            'border-radius': '18px',
+                            'background-color': '#4285f4',
+                            'color': 'white',
+                            'padding': '12px 20px',
+                            'font-weight': 'normal',
+                            'text-align': 'center'
+                        });
+                        optionsContainer.append(button);
                     });
-                    
-                    // No click handlers added here - we'll use the ones in setupChatSequence
-                    optionsContainer.append(button);
-                });
-                
+                }
                 panel.append(optionsContainer);
                 agentBlock.append(avatar).append(panel);
                 $('#chat-container').append(agentBlock);
-                
-                // Scroll to the new options
                 scrollToNewMessage(optionsContainer);
             }
             
@@ -673,12 +692,12 @@
             }
 
             // Function to show typing first, then display the message
-            function showTypingThenMessage(message, isHTML = false, typingDelay = 1200) {
+            function showTypingThenMessage(message, isHTML = false, typingDelay = 600) {
                 showTypingAnimation();
                 setTimeout(() => {
                     removeTypingAnimation();
                     addAgentMessage(message, isHTML);
-                }, typingDelay); // Typing animation shows for 1.2 seconds by default
+                }, typingDelay); // Typing animation shows for 0.6 seconds by default
             }
             
             // Function to initialize the chat with the predefined sequence
@@ -698,11 +717,11 @@
                         // Add Yes button after message
                         setTimeout(() => {
                             addOptions(['Yes'], 'horizontal');
-                        }, 2000); // Increased delay to account for typing animation
-                    }, 3000); // Increased delay to account for typing animation
+                        }, 1000); // Halved from 2000
+                    }, 1500); // Halved from 3000
                     // Set up event handling for the chat sequence
                     setupChatSequence();
-                }, 1000);
+                }, 500); // Halved from 1000
             }
             
             // Set up the chat sequence flow
@@ -721,10 +740,10 @@
                                     showTypingThenMessage('Select Your Age Range?');
                                     setTimeout(() => {
                                         addOptions(['20-64', '64+'], 'horizontal');
-                                    }, 2000);
-                                }, 3000);
-                            }, 1500);
-                        }, 300);
+                                    }, 1000); // Halved from 2000
+                                }, 1500); // Halved from 3000
+                            }, 750); // Halved from 1500
+                        }, 150); // Halved from 300
                     });
                 });
                 // Listen for clicks on the 20-64 age range button
@@ -738,10 +757,10 @@
                             setTimeout(() => {
                                 showTypingThenMessage('What is your income Level?');
                                 setTimeout(() => {
-                                    addOptions(['Under $30k', 'Over $30k'], 'horizontal');
-                                }, 2000);
-                            }, 3000);
-                        }, 300);
+                                    addOptions(['Under $30k', 'Over $30k'], 'vertical');
+                                }, 1000); // Halved from 2000
+                            }, 1500); // Halved from 3000
+                        }, 150); // Halved from 300
                     });
                 });
                 // Listen for clicks on the 64+ age range button
@@ -762,12 +781,12 @@
                                             showTypingThenMessage(`Tap the call button below and claim your exclusive benefit.`);
                                             setTimeout(() => {
                                                 addCallButton('1 (833) 670-8655');
-                                            }, 2000);
-                                        }, 3000);
-                                    }, 3000);
-                                }, 2000);
-                            }, 1500);
-                        }, 300);
+                                            }, 1000); // Halved from 2000
+                                        }, 1500); // Halved from 3000
+                                    }, 1500); // Halved from 3000
+                                }, 1000); // Halved from 2000
+                            }, 750); // Halved from 1500
+                        }, 150); // Halved from 300
                     });
                 });
                 // Listen for clicks on the Under $30k income button
@@ -790,13 +809,13 @@
                                                 addCallButton('1 (833) 670-8648');
                                                 setTimeout(() => {
                                                     showTypingThenMessage(`⏳ Spots are limited — act fast before enrollment closes!`);
-                                                }, 2000);
-                                            }, 3000);
-                                        }, 3000);
-                                    }, 3000);
-                                }, 2000);
-                            }, 1500);
-                        }, 300);
+                                                }, 1000); // Halved from 2000
+                                            }, 1500); // Halved from 3000
+                                        }, 1500); // Halved from 3000
+                                    }, 1500); // Halved from 3000
+                                }, 1000); // Halved from 2000
+                            }, 750); // Halved from 1500
+                        }, 150); // Halved from 300
                     });
                 });
                 // Listen for clicks on the Over $30k income button
@@ -819,13 +838,13 @@
                                                 addCallButton('1 (833) 670-8297');
                                                 setTimeout(() => {
                                                     showTypingThenMessage(`⏳ Spots are limited — act fast before enrollment closes!`);
-                                                }, 2000);
-                                            }, 3000);
-                                        }, 3000);
-                                    }, 3000);
-                                }, 2000);
-                            }, 1500);
-                        }, 300);
+                                                }, 1000); // Halved from 2000
+                                            }, 1500); // Halved from 3000
+                                        }, 1500); // Halved from 3000
+                                    }, 1500); // Halved from 3000
+                                }, 1000); // Halved from 2000
+                            }, 750); // Halved from 1500
+                        }, 150); // Halved from 300
                     });
                 });
             }
