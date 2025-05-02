@@ -147,10 +147,8 @@
 }
 
 .rtchat-agent-block .rtchat-agent-block-panel .rtchat-agent-block-options-container-horizontal {
-    padding-top: 0;
-    padding-left: 0.375rem;
-    padding-right: 0.375rem;
-    text-align: center;
+    padding-left: 0 !important;
+    margin-left: 0 !important;
 }
 
 .rtchat-agent-block .rtchat-agent-block-panel .rtchat-agent-block-options-container-horizontal button {
@@ -237,6 +235,11 @@
     margin-left: 1rem;
     margin-right: 1rem;
     cursor: default;
+}
+
+.rtchat-agent-block-panel {
+    padding-left: 0 !important;
+    margin-left: 0.75rem !important; /* Keep consistent with chat bubbles */
 }
     </style>
 
@@ -584,66 +587,43 @@
                 const avatar = $('<div class="rtchat-agent-block-avatar"><img src="./chat-assets/img/agent.jpg"></div>').css({
                     'opacity': '0' // Make avatar invisible but keep the structure
                 });
-                const panel = $('<div class="rtchat-agent-block-panel"></div>');
+                const panel = $('<div class="rtchat-agent-block-panel"></div>').css({
+                    'padding-left': '0',
+                    'margin-left': '0'
+                });
                 const optionsContainer = $(`<div class="rtchat-agent-block-options-container-${orientation}"></div>`);
-                if (orientation === 'vertical') {
-                    optionsContainer.css({
-                        'display': 'flex',
-                        'flex-direction': 'column',
-                        'gap': '10px',
-                        'align-items': 'flex-start',
-                        'width': 'auto'
+                optionsContainer.css({
+                    'display': 'flex',
+                    'flex-wrap': orientation === 'horizontal' ? 'wrap' : 'nowrap',
+                    'flex-direction': orientation === 'horizontal' ? 'row' : 'column',
+                    'gap': '10px',
+                    'justify-content': 'flex-start',
+                    'padding': '0',
+                    'margin': '0'
+                });
+                options.forEach(option => {
+                    let buttonText;
+                    if (typeof option === 'string') {
+                        buttonText = option;
+                    } else {
+                        buttonText = option.text;
+                    }
+                    const button = $('<button class="rtchat-agent-block-option"></button>').text(buttonText).css({
+                        'margin': '5px 5px 5px 0', // No left margin
+                        'min-width': orientation === 'horizontal' ? '100px' : '120px',
+                        'border-radius': '18px',
+                        'background-color': '#4285f4',
+                        'color': 'white',
+                        'padding': '12px 20px',
+                        'font-weight': 'normal',
+                        'text-align': 'center'
                     });
-                    options.forEach(option => {
-                        let buttonText;
-                        if (typeof option === 'string') {
-                            buttonText = option;
-                        } else {
-                            buttonText = option.text;
-                        }
-                        const button = $('<button class="rtchat-agent-block-option"></button>').text(buttonText).css({
-                            'margin': '3px 0',
-                            'min-width': '120px',
-                            'border-radius': '18px',
-                            'background-color': '#4285f4',
-                            'color': 'white',
-                            'padding': '14px 20px',
-                            'font-weight': 'normal',
-                            'text-align': 'center',
-                            'display': 'block',
-                            'width': 'fit-content'
-                        });
-                        optionsContainer.append(button);
-                    });
-                } else {
-                    optionsContainer.css({
-                        'display': 'flex',
-                        'flex-wrap': 'wrap',
-                        'gap': '10px',
-                        'justify-content': 'flex-start'
-                    });
-                    options.forEach(option => {
-                        let buttonText;
-                        if (typeof option === 'string') {
-                            buttonText = option;
-                        } else {
-                            buttonText = option.text;
-                        }
-                        const button = $('<button class="rtchat-agent-block-option"></button>').text(buttonText).css({
-                            'margin': '5px 5px',
-                            'min-width': '100px',
-                            'border-radius': '18px',
-                            'background-color': '#4285f4',
-                            'color': 'white',
-                            'padding': '12px 20px',
-                            'font-weight': 'normal',
-                            'text-align': 'center'
-                        });
-                        optionsContainer.append(button);
-                    });
-                }
+                    optionsContainer.append(button);
+                });
                 panel.append(optionsContainer);
-                agentBlock.append(avatar).append(panel);
+                agentBlock.append(avatar).append(panel).css({
+                    'padding-left': '0'
+                });
                 $('#chat-container').append(agentBlock);
                 scrollToNewMessage(optionsContainer);
             }
